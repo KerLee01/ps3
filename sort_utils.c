@@ -88,6 +88,7 @@ void rotate(t_info *src, t_info *dest, bool reverse, bool together)
 			printf("rrr\n");
 		else
 			printf("rr\n");
+		return;
 	}
 	if(together == false && reverse == true)
 			printf("rr%c\n", src->group);

@@ -116,7 +116,7 @@ void larger_sorts(t_info *a, t_info *b)
 				a->end_range = a->total_nodes + b->total_nodes;
 			continue;
 		}
-		while(a->head != a->target && rotate_b == true && a->target->reverse == false)
+		if(a->head != a->target && rotate_b == true && a->target->reverse == false)
 		{
 			rotate(a, b, false, true);
 			rotate_b = false;
@@ -133,8 +133,6 @@ void larger_sorts(t_info *a, t_info *b)
 			rotate_b = true;
 		if(b->total_nodes >= a->end_range)
 		{
-			while(a->end_range != a->part && b->head->prev->rank > a->end_range - a->part)
-				rotate(b, a, true, false);
 			a->end_range += a->part;
 			if(a->end_range > a->total_nodes + b->total_nodes)
 				a->end_range = a->total_nodes + b->total_nodes;
@@ -149,6 +147,7 @@ void larger_sorts(t_info *a, t_info *b)
 		{
 			while(b->head != b->target)
 				rotate(b, a, b->target->reverse, false);
+			printf("\nA\n");
 			push(b, a);
 
 			current = b->head;
@@ -173,6 +172,8 @@ void larger_sorts(t_info *a, t_info *b)
 			while(b->head->rank != b->total_nodes + 1)
 				rotate(b, a, b->target->reverse, false);
 			push(b, a);
+			printf("\nA\n");
+
 			swap(a);
 		}
 		else if(b->target->rank == b->total_nodes)
@@ -180,6 +181,8 @@ void larger_sorts(t_info *a, t_info *b)
 			while(b->head != b->target)
 				rotate(b, a, b->target->reverse, false);
 			push(b, a);
+			printf("\nA\n");
+
 		}
 	}
 }
@@ -206,19 +209,6 @@ void sort_stack(t_info *a, t_info *b)
 		push(a, b);
 	else if(a->total_nodes > 4)
 	{
-		push_a_to_b(a);
-		while(a->head != a->target)
-			rotate(a, b, a->target->reverse, false);
-		push(a, b);
-		if(b->total_nodes == a->end_range)
-			a->end_range += a->part;
-
-		push_a_to_b(a);
-		while(a->head != a->target)
-			rotate(a, b, a->target->reverse, false);
-		push(a, b);
-		if(b->total_nodes == a->end_range)
-			a->end_range += a->part;
+		larger_sorts(a, b);
 	}
-	larger_sorts(a, b);
 }
