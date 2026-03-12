@@ -14,6 +14,7 @@ void swap(t_info *info)
 	if(second->next == first)
 	{
 		info->head = second;
+		printf("s%c\n", info->group);
 		return;
 	}
 	third = second->next;
@@ -26,6 +27,23 @@ void swap(t_info *info)
 	tail->next = second;
 	info->head = second;
 	printf("s%c\n", info->group);
+}
+
+static void manage_push_dest(t_node *node, t_info *dest)
+{
+	if (!dest->head)
+	{
+		node->next = node;
+		node->prev = node;
+	}
+	else
+	{
+		node->next = dest->head;
+		node->prev = dest->head->prev;
+		dest->head->prev->next = node;
+		dest->head->prev = node;
+	}
+	dest->head = node;
 }
 
 void push(t_info *src, t_info *dest)
@@ -45,27 +63,10 @@ void push(t_info *src, t_info *dest)
 		src->head->prev = tail;
 		tail->next = src->head;
 	}
-
-	if (!dest->head)
-	{
-		node->next = node;
-		node->prev = node;
-	}
-	else
-	{
-		node->next = dest->head;
-		node->prev = dest->head->prev;
-		dest->head->prev->next = node;
-		dest->head->prev = node;
-	}
-	dest->head = node;
+	manage_push_dest(node, dest);
 	src->total_nodes -= 1;
 	dest->total_nodes += 1;	
-	if(dest->max == NULL || node->rank > dest->max->rank)
-		dest->max = node;
-	if(dest->min == NULL || node->rank < dest->min->rank)
-		dest->min = node;
-	printf("p%c\n", src->group);
+	printf("p%c\n", src->push_to);
 }
 
 void rotate(t_info *src, t_info *dest, bool reverse, bool together)

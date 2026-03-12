@@ -10,8 +10,6 @@ t_node *new_node(int num, int rank)
 	node->value = num;
 	node->rank = rank;
 	node->cost = 0;
-	node->interlap = 0;
-	node->reverse = false;
 	node->prev = node;
 	node->next = node;
 	return (node);
@@ -50,14 +48,13 @@ void free_nodes(t_node **list)
 	if(!list || !(*list))
 		return;
 	head = *list;
-	current = *list;
-	while(1)
+	current = head->next;
+	while(current != head)
 	{
 		next_node = (current)->next;
 		free(current);
 		current = next_node;
-		if(current == head)
-			break;
 	}
+	free(head);
 	*list = NULL;
 }

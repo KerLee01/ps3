@@ -41,17 +41,17 @@ long find_check_num(t_node **list, char *num_str, int *num_rank)
 	while(num_str[i] != '\0')
 	{
 		num *= 10;
-		if(i == 0 && num_str[i] == '-')
+		if(i == 0 && num_str[i] == '-' && (num_str[i + 1] >= '0' && num_str[i + 1] <= '9'))
 			negative = -1;
 		else if(num_str[i] >= '0' && num_str[i] <= '9')
 			num += num_str[i] - '0';
 		else
-			return (printf("ERROR\n"), ERROR_INT); // alphabeth found
+			return (printf("ERROR\n"), ERROR_INT);
 		i++;
 	}
 	num *= negative;
 	if(num < INT_MIN || num > INT_MAX)
-		return (printf("ERROR\n"), ERROR_INT); // out of bound
+		return (printf("ERROR\n"), ERROR_INT);
 	if(check_duplicate(list, num, num_rank) == true)
 		return(printf("ERROR\n"), ERROR_INT);
 	return (num);
@@ -75,7 +75,10 @@ int check_insert_input(t_node **list, int argc, char **argv)
 		{
 			node = new_node(num, num_rank);
 			if(node == NULL)
+			{
+				free_nodes(list);
 				return (-1);
+			}
 			attach_back(node, list);
 		}
 		i++;

@@ -11,25 +11,15 @@ typedef struct s_node
    int value;
    size_t rank;
    size_t cost;
-   size_t interlap;
-   bool reverse;
    struct s_node *prev;
    struct s_node *next;
-   struct s_node *a_target;
 } t_node;
 
 typedef struct s_info
 {
    char group;
-   bool ascending;
-   size_t counter;
-   size_t end_range;
-   size_t part;
-   t_node * min;
-   t_node * max;
+   char push_to;
    size_t total_nodes;
-   t_node *min_cost;
-   t_node *target;
    t_node *head;
 } t_info;
 
@@ -38,7 +28,7 @@ typedef struct s_info
 #endif
 
 // push_swap.c
-void print_list(t_node *list);
+void print_list(t_node *list); //remove
 
 // create_list.c
 t_node *new_node(int num, int rank);
@@ -56,6 +46,5 @@ void push(t_info *src, t_info *dest);
 void rotate(t_info *src, t_info *dest, bool reverse, bool together);
 
 // sort_stack.c
-void sort_three(t_info *info);
 void sort_stack(t_info *a_info, t_info *b_info);
 #endif

@@ -1,6 +1,6 @@
 #include "push_swap.h"
 
-void sort_three(t_info *info)
+static void sort_three(t_info *info)
 {
 	t_node *first = info->head;
 	t_node *second = first->next;
@@ -16,12 +16,9 @@ void sort_three(t_info *info)
 	
 	if (second->rank < first->rank)
 		swap(info);
-		
-	info->max = info->head->next->next;
-	info->min = info->head;
 }
 
-void butterfly_sort(t_info *a, t_info *b)
+static void butterfly_sort(t_info *a, t_info *b)
 {
 	int chunk;
 	size_t counter;
@@ -46,56 +43,58 @@ void butterfly_sort(t_info *a, t_info *b)
 			counter++;
 		}
 		else
-		{
 			rotate(a, b, false, false);
-		}
 	}
 }
 
-void return_to_a(t_info *a, t_info *b)
+static void is_reverse_push(t_info *a, t_info* b, size_t cost)
+{
+	bool reverse;
+
+	reverse = false;
+	if (cost <= b->total_nodes / 2)
+		reverse = false;
+	else
+	{
+		reverse = true;
+		cost = b->total_nodes - cost;
+	}
+	while (cost > 0)
+	{
+		rotate(b, a, reverse, false);
+		cost--;
+	}
+	push(b, a);
+}
+
+static void return_to_a(t_info *a, t_info *b)
 {
 	t_node *current;
-	size_t max_pos;
-	int max_rank;
-	int pos;
-	int cost;
-	bool reverse;
+	t_node *b_head;
+	size_t max_cost;
+	size_t cost;
+	size_t max_rank;
 
 	while (b->total_nodes > 0)
 	{
 		current = b->head;
-		max_pos = 0;
-		max_rank = -1;
-		pos = 0;
-
-		while (current != b->head)
+		b_head = b->head;
+		max_cost = 0;
+		max_rank = 0;
+		cost = 0;
+		while (1)
 		{
-			if ((int)current->rank > max_rank)
+			if (current->rank > max_rank)
 			{
 				max_rank = current->rank;
-				max_pos = pos;
+				max_cost = cost;
 			}
-			pos++;
+			cost++;
 			current = current->next;
-		} 
-
-		if (max_pos <= b->total_nodes / 2)
-		{
-			reverse = false;
-			cost = max_pos;
+			if(current == b_head)
+				break;
 		}
-		else
-		{
-			reverse = true;
-			cost = b->total_nodes - max_pos;
-		}
-
-		while (cost > 0)
-		{
-			rotate(b, a, reverse, false);
-			cost--;
-		}
-		push(b, a);
+		is_reverse_push(a, b, max_cost);
 	}
 }
 
@@ -119,5 +118,4 @@ void sort_stack(t_info *a, t_info *b)
 
 	butterfly_sort(a, b);
 	return_to_a(a, b);
-	print_list(a->head);
 }

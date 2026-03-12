@@ -17,7 +17,8 @@ void print_list(t_node *list)
 			break;
 	}
 }
-t_info *create_info(char group, int total_nodes, t_node *head, bool ascending)
+
+t_info *create_info(char group, char push_to, int total_nodes, t_node *head)
 {
 	t_info *info;
 
@@ -25,15 +26,8 @@ t_info *create_info(char group, int total_nodes, t_node *head, bool ascending)
 	if(info == NULL)
 		return NULL;
 	info->group = group;
-	info->ascending = ascending;
-	info->counter = 0;
-	info->end_range = 0;
-	info->part = 0;
-	info->max = 0;
-	info->min = 0;
+	info->push_to = push_to;
 	info->total_nodes = total_nodes;
-	info->min_cost = NULL;
-	info->target = NULL;
 	info->head = head;
 	return info;
 }
@@ -52,21 +46,16 @@ int main(int argc, char **argv)
 		free_nodes(&a_list);
 		return -1;
 	}
-	a_info = create_info('a', argc - 1, a_list, true);
-	b_info = create_info('b', 0, b_list, false);
+	a_info = create_info('a', 'b', argc - 1, a_list);
+	if(a_info == NULL)
+		return -1;
+	b_info = create_info('b', 'a', 0, b_list);
+	if(b_info == NULL)
+		return -1;
 	sort_stack(a_info, b_info);
-	/*
-	printf("Before:\n");
-	print_list(a_info->head);
-	sort_stack(a_info, b_info);
-	printf("After:\nA:\n");
-	print_list(a_info->head);
-	printf("B:\n");
-	print_list(b_info->head);
-	*/
-	//print_list(a_info->head);
 	free_nodes(&a_info->head);
+	free(a_info);
 	free_nodes(&b_info->head);
-
+	free(b_info);
 	return 0;
 }
