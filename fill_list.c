@@ -46,14 +46,14 @@ long find_check_num(t_node **list, char *num_str, int *num_rank)
 		else if(num_str[i] >= '0' && num_str[i] <= '9')
 			num += num_str[i] - '0';
 		else
-			return (printf("ERROR\n"), ERROR_INT);
+			return (write(2, "ERROR\n", 6), ERROR_INT);
 		i++;
 	}
 	num *= negative;
 	if(num < INT_MIN || num > INT_MAX)
-		return (printf("ERROR\n"), ERROR_INT);
+		return (write(2, "ERROR\n", 6), ERROR_INT);
 	if(check_duplicate(list, num, num_rank) == true)
-		return(printf("ERROR\n"), ERROR_INT);
+		return(write(2, "ERROR\n", 6), ERROR_INT);
 	return (num);
 }
 

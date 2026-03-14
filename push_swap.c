@@ -1,37 +1,5 @@
 #include "push_swap.h"
 
-void print_list(t_node *list)
-{
-	t_node *head;
-	t_node *node;
-
-	if(!list)
-		return;
-	head = list;
-	node = list;
-	while(1)
-	{
-		printf("rank: %zu, value: %d\n", node->rank, node->value);
-		node = node->next;
-		if(node == head)
-			break;
-	}
-}
-
-t_info *create_info(char group, char push_to, int total_nodes, t_node *head)
-{
-	t_info *info;
-
-	info = malloc(sizeof(t_info));
-	if(info == NULL)
-		return NULL;
-	info->group = group;
-	info->push_to = push_to;
-	info->total_nodes = total_nodes;
-	info->head = head;
-	return info;
-}
-
 int main(int argc, char **argv)
 {
 	t_info *a_info;

@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 typedef struct s_node
 {
@@ -28,7 +29,7 @@ typedef struct s_info
 #endif
 
 // push_swap.c
-void print_list(t_node *list); //remove
+t_info *create_info(char group, char push_to, int total_nodes, t_node *head);
 
 // create_list.c
 t_node *new_node(int num, int rank);

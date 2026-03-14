@@ -1,18 +1,7 @@
 #include "push_swap.h"
+#include "checker.h"
 
-static void write_move(char *move, char group)
-{
-	int i;
-
-	i = 0;
-	while(move[i] != '\0')
-		i++;
-	write(1, move, i);
-	write(1, &group, 1);
-	write(1, "\n", 1);
-}
-
-void swap(t_info *info)
+void c_swap(t_info *info)
 {
 	t_node *first;
 	t_node *second;
@@ -26,7 +15,6 @@ void swap(t_info *info)
 	if(second->next == first)
 	{
 		info->head = second;
-		write_move("s", info->group);
 		return;
 	}
 	third = second->next;
@@ -38,7 +26,6 @@ void swap(t_info *info)
 	third->prev = first;
 	tail->next = second;
 	info->head = second;
-	write_move("s", info->group);
 }
 
 static void manage_push_dest(t_node *node, t_info *dest)
@@ -58,7 +45,7 @@ static void manage_push_dest(t_node *node, t_info *dest)
 	dest->head = node;
 }
 
-void push(t_info *src, t_info *dest)
+void c_push(t_info *src, t_info *dest)
 {
 	t_node *node;
 	t_node *tail;
@@ -78,10 +65,9 @@ void push(t_info *src, t_info *dest)
 	manage_push_dest(node, dest);
 	src->total_nodes -= 1;
 	dest->total_nodes += 1;	
-	write_move("p", src->push_to);
 }
 
-void rotate(t_info *src, t_info *dest, bool reverse, bool together)
+void c_rotate(t_info *src, t_info *dest, bool reverse, bool together)
 {
 	if(!src->head || src->head->next == src->head)
 		return;
@@ -97,14 +83,6 @@ void rotate(t_info *src, t_info *dest, bool reverse, bool together)
 			dest->head = dest->head->next;
 		else
 			dest->head = dest->head->prev;
-		if(reverse == true)
-			write(1, "rrr\n", 4);
-		else
-			write(1, "rr\n", 3);
 		return;
 	}
-	if(together == false && reverse == true)
-			write_move("rr", src->group);
-	else if(together == false && reverse == false)
-			write_move("r", src->group);
 }
